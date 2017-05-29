@@ -1,0 +1,14 @@
+node { 
+   stage 'Dev-Build'
+    openshiftBuild(namespace:'ocpworkshop-dev',buildConfig: 'a-ver', showBuildLogs: 'true')
+   stage 'Dev-Deploy'
+    openshiftDeploy(namespace:'ocpworkshop-dev', deploymentConfig: 'a-ver')
+    openshiftScale(namespace:'ocpworkshop-dev', deploymentConfig: 'a-ver',replicaCount: '1')
+   stage 'Test-Deploy'
+    openshiftDeploy(namespace:'ocpworkshop-test', deploymentConfig: 'a-ver')
+    openshiftScale(namespace:'ocpworkshop-test', deploymentConfig: 'a-ver',replicaCount: '1')
+   stage 'Prod-Deploy'
+    input 'Should we deploy to Production?'
+    openshiftDeploy(namespace:'ocpworkshop-prod', deploymentConfig: 'a-ver')
+    openshiftScale(namespace:'ocpworkshop-prod', deploymentConfig: 'a-ver',replicaCount: '1')
+  }
